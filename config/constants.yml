@@ -1,0 +1,11 @@
+bank:
+  provider1:
+    host: https://first-payment-provider
+    path: /payments/transfer
+  provider2:
+    host: https://second-payment-provider
+    path: /cards/pay
+sms:
+  provider1:
+    host: https://sms-provider
+    path: /messages/send-sms

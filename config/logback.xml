@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+    <!--<include resource="org/springframework/boot/logging/logback/defaults.xml"/>-->
+    <springProperty scope="context" name="applicationName" source="spring.application.name"/>
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <Pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="RabbitMQ_Notif" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/notif/transfer.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/notif/archive/transfer_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>5MB</maxFileSize>
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>
+                %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="SMS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/sms/log.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/sms/archive/los_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>5MB</maxFileSize>
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>
+                %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    <logger name="RabbitMQ" additivity="false">
+        <appender-ref ref="RabbitMQ_Notif"/>
+    </logger>
+    <logger name="Sms" additivity="false">
+        <appender-ref ref="SMS"/>
+    </logger>
+
+    <!--<root level="INFO">
+        <appender-ref ref="consoleAppender"/>
+        &lt;!&ndash;<appender-ref ref="FILE"/>&ndash;&gt;
+    </root>
+    <root level="ERROR">
+        <appender-ref ref="consoleAppender"/>
+        &lt;!&ndash;<appender-ref ref="FILE"/>&ndash;&gt;
+    </root>
+    <root level="WARN">
+        <appender-ref ref="consoleAppender"/>
+        &lt;!&ndash;<appender-ref ref="FILE"/>&ndash;&gt;
+    </root>-->
+</configuration>

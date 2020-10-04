@@ -1,0 +1,16 @@
+server:
+  port: 8082
+
+spring:
+  datasource.driverClassName: com.mysql.cj.jdbc.Driver
+  datasource.url: jdbc:mysql://db:3306/payment_card_manager
+  datasource.username: root
+  datasource.password: 123
+  jpa.database-platform: org.hibernate.dialect.MySQL5Dialect
+  jpa.show-sql: false
+  jpa.hibernate.hbm2ddl.auto: update
+  application:
+    name: payment_service
+
+  profiles:
+    active: LocalApi

@@ -1,0 +1,13 @@
+bank:
+  provider1:
+    # host: https://first-payment-provider
+    host: http://localhost:8090
+    path: /payments/transfer
+  provider2:
+    host: https://second-payment-provider
+    path: /cards/pay
+sms:
+  provider1:
+    # host: https://sms-provider
+    host: http://localhost:8090
+    path: /messages/send-sms

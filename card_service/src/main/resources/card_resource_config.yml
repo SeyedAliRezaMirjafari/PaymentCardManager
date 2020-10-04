@@ -1,0 +1,2 @@
+# Spring properties
+entitymanager.packagesToScan: com.sed.card_service.common,com.sed.card_service,com.sed.card_service.dataaccess.models,com.sed.card_service.config,com.sed.card_service.dataaccess.repositories

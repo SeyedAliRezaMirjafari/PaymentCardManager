@@ -1,0 +1,54 @@
+version: '3.3'
+services:
+   card:
+     build: card/.
+     ports:
+       - 8081:8081
+     depends_on:
+       - db
+     volumes:
+       - /project/config:/var/paymenr_card_manager/config
+   payment:
+     build: payment/.
+     ports:
+       - 8082:8082
+     depends_on:
+       - db
+     volumes:
+       - /project/config:/var/paymenr_card_manager/config  
+       - /project/logs:/var/paymenr_card_manager/logs  
+   notificaiton:
+     build: notification/.
+     depends_on:
+       - rabbitmq
+     volumes:
+       - /project/config:/var/paymenr_card_manager/config
+   db:
+     image: mysql:latest
+     environment:
+       MYSQL_ROOT_PASSWORD: 123
+       MYSQL_DATABASE: payment_card_manager
+       MYSQL_USER: app
+       MYSQL_PASSWORD: 123
+     ports:
+       - 3306:3306
+     volumes:
+       - /my/own/datadir:/var/paymenr_card_manager/mysql
+   rabbitmq:
+     image: rabbitmq:latest
+     ports:
+       - 5672:5672
+       - 15672:15672
+     environment:
+       - RABBITMQ_DEFAULT_USER=sedalireza
+       - RABBITMQ_DEFAULT_PASS=123
+   logstash:
+     image: logstash:7.9.2
+     ports:
+       - 9200:9200
+     volumes:
+       - ./:/var/paymenr_card_manager/config
+       - /var/logs/logstash:/var/paymenr_card_manager/logs 
+     command: logstash -f /var/paymenr_card_manager/config/logstash.conf
+     environment:
+       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
