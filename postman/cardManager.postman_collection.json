@@ -1,0 +1,91 @@
+{
+	"info": {
+		"_postman_id": "a7d82e81-b120-4ebf-9bfa-2088d27c7af6",
+		"name": "cardManager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "saveCard",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"cardName\":\"بانک ملی خودم\",\r\n    \"cardNumber\":\"1234-1234-1234-1234\",\r\n    \"bank\":\"ملی\",\r\n    \"userId\":1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/card/save",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"card",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllCard",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/card/getAllCard?userId=1",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"card",
+						"getAllCard"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "removeCard",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\":1,\r\n    \"id\":4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/card/remove",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"card",
+						"remove"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
