@@ -1,13 +1,14 @@
 package com.sed.notification_service.config;
 
 
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.MessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,11 @@ import java.io.UnsupportedEncodingException;
 
 @Configuration
 public class RabbitMqConfig {
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+    @Autowired
+    RabbitAdmin rabbitAdmin;
 
     @Bean
     public ConnectionFactory connectionFactory(String rabbitHost, String rabbitPort, String rabbitUsername, String rabbitPassword) {
@@ -42,16 +48,31 @@ public class RabbitMqConfig {
         return r;
     }
 
-
-
+    @Bean
+    public RabbitAdmin rabbitAdmin(@Value("${spring.rabbitmq.host}") String rabbitHost,
+                                   @Value("${spring.rabbitmq.port}") String rabbitPort,
+                                   @Value("${spring.rabbitmq.username}") String rabbitUsername,
+                                   @Value("${spring.rabbitmq.password}") String rabbitPassword) throws UnsupportedEncodingException {
+        final RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory(rabbitHost, rabbitPort,
+                new String(rabbitUsername.getBytes(), "UTF-8"),
+                new String(rabbitPassword.getBytes(), "UTF-8")));
+        rabbitAdmin.afterPropertiesSet();
+        return rabbitAdmin;
+    }
 
     @Bean
     Queue queue() {
-        return new Queue("sms", false);
+        Queue queue = new Queue("sms", false);
+        rabbitAdmin.declareQueue(queue);
+        Binding binding = BindingBuilder.bind(queue).to(topic()).with("#");
+        rabbitAdmin.declareBinding(binding);
+        return queue;
     }
 
-    @Autowired
-    RabbitTemplate rabbitTemplate;
+    @Bean
+    public TopicExchange topic() {
+        return new TopicExchange("transferCard", true, false);
+    }
 }
 
 
